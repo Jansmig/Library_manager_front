@@ -1,14 +1,19 @@
 package com.manager.front2.domain.service;
 
 import com.manager.front2.domain.OriginDto;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Optional.ofNullable;
 
 public class OriginService {
 
-    private Set origins;
+    private List<OriginDto> origins;
     private static OriginService originService;
+    private RestTemplate restTemplate = new RestTemplate();
 
     private OriginService() {
         this.origins = fetchOrigins();
@@ -21,15 +26,15 @@ public class OriginService {
         return originService;
     }
 
-    public Set getOrigins() {
-        return new HashSet<>(origins);
+    public List<OriginDto> getOrigins() {
+        return new ArrayList<>(origins);
     }
 
-    private Set fetchOrigins(){
-        Set<OriginDto> origins = new HashSet<>();
-        origins.add(new OriginDto(1L, "a", "aa", 1111, "1111"));
-        origins.add(new OriginDto(2L, "b", "bb", 2222, "2222"));
-        return origins;
+    private List<OriginDto> fetchOrigins(){
+        String url = "http://localhost:8080/v1/origins";
+        OriginDto[] originDto = restTemplate.getForObject(url, OriginDto[].class);
+        return Arrays.asList(ofNullable(originDto).orElse(new OriginDto[0]));
+
     }
 
 }

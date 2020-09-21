@@ -1,5 +1,8 @@
 package com.manager.front2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OriginDto {
 
     private long id;

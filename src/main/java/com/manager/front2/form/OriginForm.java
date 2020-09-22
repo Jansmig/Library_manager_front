@@ -1,23 +1,20 @@
-package com.manager.front2.domain.form;
+package com.manager.front2.form;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.manager.front2.MainView;
 import com.manager.front2.domain.OriginDto;
-import com.manager.front2.domain.service.OriginService;
+import com.manager.front2.service.OriginService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.PropertyId;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
-import com.vaadin.flow.data.converter.StringToLongConverter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OriginForm extends FormLayout {
 
- //   private TextField id = new TextField("ID");
     private TextField title = new TextField("Title");
     private TextField author = new TextField("Author");
     private TextField publishedYear = new TextField("Published year");

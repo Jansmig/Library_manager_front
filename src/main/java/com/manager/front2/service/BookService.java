@@ -1,9 +1,8 @@
-package com.manager.front2.domain.service;
+package com.manager.front2.service;
 
 import com.manager.front2.domain.BookDto;
 import org.springframework.web.client.RestTemplate;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +24,7 @@ public class BookService {
         this.books = fetchBooks();
     }
 
-    private List<BookDto> fetchBooks() {
+    public List<BookDto> fetchBooks() {
         String url = "http://localhost:8080/v1/books";
         BookDto[] bookDtos = restTemplate.getForObject(url, BookDto[].class);
         if (bookDtos != null) {
@@ -35,7 +34,4 @@ public class BookService {
         }
     }
 
-    public List<BookDto> getBooks() {
-        return new ArrayList<>(books);
-    }
 }

@@ -1,4 +1,4 @@
-package com.manager.front2.domain.service;
+package com.manager.front2.service;
 
 import com.manager.front2.domain.OriginDto;
 import org.springframework.web.client.RestTemplate;
@@ -27,10 +27,6 @@ public class OriginService {
         return originService;
     }
 
-
-    public List<OriginDto> getOrigins() {
-        return new ArrayList<>(origins);
-    }
 
     public List<OriginDto> fetchOrigins(){
         String url = "http://localhost:8080/v1/origins";

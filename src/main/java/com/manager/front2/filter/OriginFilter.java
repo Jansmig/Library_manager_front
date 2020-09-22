@@ -1,6 +1,6 @@
-package com.manager.front2.domain.filter;
+package com.manager.front2.filter;
 
-import com.manager.front2.domain.service.OriginService;
+import com.manager.front2.service.OriginService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;

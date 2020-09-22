@@ -32,7 +32,7 @@ public class OriginService {
         return new ArrayList<>(origins);
     }
 
-    private List<OriginDto> fetchOrigins(){
+    public List<OriginDto> fetchOrigins(){
         String url = "http://localhost:8080/v1/origins";
         OriginDto[] originDto = restTemplate.getForObject(url, OriginDto[].class);
         return Arrays.asList(ofNullable(originDto).orElse(new OriginDto[0]));
@@ -45,6 +45,16 @@ public class OriginService {
                 .collect(Collectors.toList());
     }
 
+    public void saveOrigin(OriginDto originDto) {
+        String url = "http://localhost:8080/v1/origins";
+        restTemplate.postForObject(url, originDto, OriginDto.class);
+    }
+
+    public void deleteOrigin(OriginDto originDto) {
+        long originId = originDto.getId();
+        String url = "http://localhost:8080/v1/origins/" + originId;
+        restTemplate.delete(url);
+    }
 
 
 }

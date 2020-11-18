@@ -6,6 +6,7 @@ import com.manager.front2.domain.RentalDto;
 import com.manager.front2.domain.UserDto;
 import com.manager.front2.filter.BookFilter;
 import com.manager.front2.filter.OriginFilter;
+import com.manager.front2.filter.StatusFilter;
 import com.manager.front2.form.OriginForm;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
@@ -35,14 +36,17 @@ public class MainView extends VerticalLayout {
     private Grid usersGrid = new Grid<>(UserDto.class);
     private Grid rentalsGrid = new Grid<>(RentalDto.class);
     private OriginFilter originFilter = new OriginFilter(originsGrid);
-    private BookFilter bookFilter = new BookFilter(booksGrid);
     private OriginForm originForm = new OriginForm(this);
     private Button addNewOrigin = new Button("Add new Origin");
+    private BookFilter bookFilter = new BookFilter(booksGrid);
+    private StatusFilter statusFilter = new StatusFilter(booksGrid);
 
 
     public MainView() {
         originsGrid.setColumns("id", "title", "author", "publishedYear", "isbn");
         booksGrid.setColumns("id", "originId", "title", "bookStatus");
+        usersGrid.setColumns("id", "firstName", "lastName", "email", "userCreationDate");
+        rentalsGrid.setColumns("id", "active", "bookId", "bookTitle", "userId", "userFirstName", "userLastName", "rentalDate", "returnDate");
         originForm.setOrigin(null);
 
         addNewOrigin.addClickListener(event -> {
@@ -60,6 +64,7 @@ public class MainView extends VerticalLayout {
         Div booksPage = new Div();
         booksPage.add(booksGrid);
         booksPage.add(bookFilter);
+        booksPage.add(statusFilter);
         booksPage.setVisible(false);
 
         Tab usersTab = new Tab("Users");

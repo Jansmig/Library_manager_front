@@ -7,6 +7,7 @@ import com.manager.front2.domain.UserDto;
 import com.manager.front2.filter.BookFilter;
 import com.manager.front2.filter.OriginFilter;
 import com.manager.front2.filter.StatusFilter;
+import com.manager.front2.form.BookCreateForm;
 import com.manager.front2.form.OriginForm;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
@@ -40,6 +41,8 @@ public class MainView extends VerticalLayout {
     private Button addNewOrigin = new Button("Add new Origin");
     private BookFilter bookFilter = new BookFilter(booksGrid);
     private StatusFilter statusFilter = new StatusFilter(booksGrid);
+    private Button addNewBook = new Button("Add new Book");
+    private BookCreateForm bookCreateForm = new BookCreateForm(this);
 
 
     public MainView() {
@@ -65,6 +68,9 @@ public class MainView extends VerticalLayout {
         booksPage.add(booksGrid);
         booksPage.add(bookFilter);
         booksPage.add(statusFilter);
+        booksPage.add(addNewBook);
+        addNewBook.addClickListener(e -> bookCreateForm.setVisible(true));
+        booksPage.add(bookCreateForm);
         booksPage.setVisible(false);
 
         Tab usersTab = new Tab("Users");

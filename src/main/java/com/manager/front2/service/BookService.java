@@ -2,7 +2,9 @@ package com.manager.front2.service;
 
 import com.manager.front2.domain.BookDto;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +34,17 @@ public class BookService {
         } else {
             return new ArrayList<BookDto>();
         }
+    }
+
+    public void createBook(long originId){
+        URI url = UriComponentsBuilder.fromHttpUrl("http://localhost:8080/v1/books/createBook")
+                .queryParam("originId", originId)
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.postForObject(url, null, BookDto.class);
+
     }
 
 }

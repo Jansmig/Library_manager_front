@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -27,11 +28,11 @@ public class BookEditForm extends FormLayout {
 
 
     public BookEditForm(MainView mainView){
+        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        buttons.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, save, delete);
         bookStatus.setItems(BookStatus.values());
-   //     HorizontalLayout buttons = new HorizontalLayout(save, delete);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(bookStatus, save, delete);
+        add(bookStatus, buttons);
         binder.bindInstanceFields(this);
         save.addClickListener(e -> updateBook());
         delete.addClickListener(e -> deleteBook());

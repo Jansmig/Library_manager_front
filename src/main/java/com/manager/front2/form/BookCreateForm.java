@@ -7,6 +7,7 @@ import com.manager.front2.service.OriginService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import java.util.Optional;
@@ -20,7 +21,9 @@ public class BookCreateForm extends FormLayout {
     private MainView mainView;
 
     public BookCreateForm(MainView mainView){
-        add(bookOriginBox, create);
+        HorizontalLayout buttons = new HorizontalLayout(create);
+        buttons.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, create);
+        add(bookOriginBox, buttons);
         create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         create.addClickListener(e -> createBook());
         this.mainView = mainView;

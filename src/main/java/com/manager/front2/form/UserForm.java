@@ -7,6 +7,8 @@ import com.manager.front2.service.UserService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
@@ -23,12 +25,15 @@ public class UserForm extends FormLayout {
     private MainView mainView;
 
     public UserForm(MainView mainView) {
+        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        buttons.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, save, delete);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(firstName, lastName, email, save, delete);
+        add(firstName, lastName, email, buttons);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());
         delete.addClickListener(event -> delete());
         this.mainView = mainView;
+
     }
 
     private void save() {

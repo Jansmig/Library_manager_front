@@ -29,7 +29,6 @@ public class OriginForm extends FormLayout {
         HorizontalLayout buttons = new HorizontalLayout(save, delete);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(title, author, publishedYear, isbn, buttons);
-
         binder.forField(publishedYear)
                 .withConverter(new StringToIntegerConverter("Requires integer"))
                 .bind(OriginDto::getPublishedYear, OriginDto::setPublishedYear);

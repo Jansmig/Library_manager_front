@@ -8,6 +8,7 @@ import com.manager.front2.filter.BookFilter;
 import com.manager.front2.filter.OriginFilter;
 import com.manager.front2.filter.StatusFilter;
 import com.manager.front2.form.BookCreateForm;
+import com.manager.front2.form.BookEditForm;
 import com.manager.front2.form.OriginForm;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
@@ -43,6 +44,7 @@ public class MainView extends VerticalLayout {
     private StatusFilter statusFilter = new StatusFilter(booksGrid);
     private Button addNewBook = new Button("Add new Book");
     private BookCreateForm bookCreateForm = new BookCreateForm(this);
+    private BookEditForm bookEditForm = new BookEditForm(this);
 
 
     public MainView() {
@@ -50,18 +52,17 @@ public class MainView extends VerticalLayout {
         booksGrid.setColumns("id", "originId", "title", "bookStatus");
         usersGrid.setColumns("id", "firstName", "lastName", "email", "userCreationDate");
         rentalsGrid.setColumns("id", "active", "bookId", "bookTitle", "userId", "userFirstName", "userLastName", "rentalDate", "returnDate");
-        originForm.setOrigin(null);
-
-        addNewOrigin.addClickListener(event -> {
-            originForm.setOrigin(new OriginDto());
-        });
 
         Tab originsTab = new Tab("Origins");
         Div originPage = new Div();
+        originForm.setOrigin(null);
         originPage.add(originsGrid);
         originPage.add(originFilter);
         originPage.add(addNewOrigin);
         originPage.add(originForm);
+        addNewOrigin.addClickListener(event -> {
+            originForm.setOrigin(new OriginDto());
+        });
 
         Tab booksTab = new Tab("Books");
         Div booksPage = new Div();
@@ -71,6 +72,10 @@ public class MainView extends VerticalLayout {
         booksPage.add(addNewBook);
         addNewBook.addClickListener(e -> bookCreateForm.setVisible(true));
         booksPage.add(bookCreateForm);
+        bookEditForm.setBook(null);
+        booksGrid.asSingleSelect().addValueChangeListener(e ->
+                bookEditForm.setBook((BookDto) booksGrid.asSingleSelect().getValue()));
+        booksPage.add(bookEditForm);
         booksPage.setVisible(false);
 
         Tab usersTab = new Tab("Users");

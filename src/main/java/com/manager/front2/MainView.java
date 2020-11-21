@@ -10,6 +10,7 @@ import com.manager.front2.filter.StatusFilter;
 import com.manager.front2.form.BookCreateForm;
 import com.manager.front2.form.BookEditForm;
 import com.manager.front2.form.OriginForm;
+import com.manager.front2.form.UserForm;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
 import com.manager.front2.service.RentalService;
@@ -45,6 +46,8 @@ public class MainView extends VerticalLayout {
     private Button addNewBook = new Button("Add new Book");
     private BookCreateForm bookCreateForm = new BookCreateForm(this);
     private BookEditForm bookEditForm = new BookEditForm(this);
+    private UserForm userForm = new UserForm(this);
+    private Button addNewUser = new Button("Add new User");
 
 
     public MainView() {
@@ -81,6 +84,12 @@ public class MainView extends VerticalLayout {
         Tab usersTab = new Tab("Users");
         Div usersPage = new Div();
         usersPage.add(usersGrid);
+        usersPage.add(addNewUser);
+        addNewUser.addClickListener(e -> userForm.setUser(new UserDto()));
+        userForm.setUser(null);
+        usersGrid.asSingleSelect().addValueChangeListener(e ->
+                userForm.setUser((UserDto) usersGrid.asSingleSelect().getValue()));
+        usersPage.add(userForm);
         usersPage.setVisible(false);
 
         Tab rentalsTab = new Tab("Rentals");

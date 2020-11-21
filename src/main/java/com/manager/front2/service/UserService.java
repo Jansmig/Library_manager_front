@@ -35,4 +35,15 @@ public class UserService {
         }
     }
 
+    public void saveUser(UserDto userDto) {
+        String url = "http://localhost:8080/v1/users/";
+        restTemplate.postForObject(url, userDto, UserDto.class);
+    }
+
+    public void deleteUser(UserDto userDto) {
+        long userId = userDto.getId();
+        String url = "http://localhost:8080/v1/users/" + userId;
+        restTemplate.delete(url);
+    }
+
 }

@@ -7,10 +7,7 @@ import com.manager.front2.domain.UserDto;
 import com.manager.front2.filter.BookFilter;
 import com.manager.front2.filter.OriginFilter;
 import com.manager.front2.filter.StatusFilter;
-import com.manager.front2.form.BookCreateForm;
-import com.manager.front2.form.BookEditForm;
-import com.manager.front2.form.OriginForm;
-import com.manager.front2.form.UserForm;
+import com.manager.front2.form.*;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
 import com.manager.front2.service.RentalService;
@@ -48,6 +45,8 @@ public class MainView extends VerticalLayout {
     private BookEditForm bookEditForm = new BookEditForm(this);
     private UserForm userForm = new UserForm(this);
     private Button addNewUser = new Button("Add new User");
+    private Button addNewRental = new Button("Add new Rental");
+    private CreateRentalForm createRentalForm = new CreateRentalForm(this);
 
 
     public MainView() {
@@ -95,6 +94,9 @@ public class MainView extends VerticalLayout {
         Tab rentalsTab = new Tab("Rentals");
         Div rentalsPage = new Div();
         rentalsPage.add(rentalsGrid);
+        rentalsPage.add(addNewRental);
+        addNewRental.addClickListener(e -> createRentalForm.setRental(new RentalDto()));
+        rentalsPage.add(createRentalForm);
         rentalsPage.setVisible(false);
 
         Map<Tab, Component> tabsToPages = new HashMap<>();

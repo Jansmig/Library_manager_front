@@ -35,4 +35,9 @@ public class RentalService {
         }
     }
 
+    public void createRental(RentalDto rentalDto){
+        String url = "http://localhost:8080/v1/rentals/createRental";
+        restTemplate.postForObject(url, rentalDto, RentalDto.class);
+    }
+
 }

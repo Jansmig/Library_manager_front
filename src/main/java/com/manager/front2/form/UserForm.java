@@ -17,7 +17,7 @@ public class UserForm extends FormLayout {
 
     private TextField firstName = new TextField("First name");
     private TextField lastName = new TextField("Last name");
-    private TextField email = new TextField("email");
+    private TextField email = new TextField("Email");
     private Button save = new Button("Save");
     private Button delete = new Button("Delete");
     private UserService userService = UserService.getInstance();

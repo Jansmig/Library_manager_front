@@ -40,4 +40,16 @@ public class RentalService {
         restTemplate.postForObject(url, rentalDto, RentalDto.class);
     }
 
+    public void closeRental(RentalDto rentalDto){
+        long rentalId = rentalDto.getId();
+        String url = "http://localhost:8080/v1/rentals/" + rentalId;
+        restTemplate.put(url, null, RentalDto.class);
+    }
+
+    public void deleteRental(RentalDto rentalDto){
+        long rentalId = rentalDto.getId();
+        String url = "http://localhost:8080/v1/rentals/" + rentalId;
+        restTemplate.delete(url);
+    }
+
 }

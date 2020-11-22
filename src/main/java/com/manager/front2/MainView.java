@@ -47,6 +47,7 @@ public class MainView extends VerticalLayout {
     private Button addNewUser = new Button("Add new User");
     private Button addNewRental = new Button("Add new Rental");
     private CreateRentalForm createRentalForm = new CreateRentalForm(this);
+    private EditRentalForm editRentalForm = new EditRentalForm(this);
 
 
     public MainView() {
@@ -54,6 +55,10 @@ public class MainView extends VerticalLayout {
         booksGrid.setColumns("id", "originId", "title", "bookStatus");
         usersGrid.setColumns("id", "firstName", "lastName", "email", "userCreationDate");
         rentalsGrid.setColumns("id", "active", "bookId", "bookTitle", "userId", "userFirstName", "userLastName", "rentalDate", "returnDate");
+        alignGridColumns(originsGrid);
+        alignGridColumns(booksGrid);
+        alignGridColumns(usersGrid);
+        alignGridColumns(rentalsGrid);
 
         Tab originsTab = new Tab("Origins");
         Div originPage = new Div();
@@ -96,7 +101,11 @@ public class MainView extends VerticalLayout {
         rentalsPage.add(rentalsGrid);
         rentalsPage.add(addNewRental);
         addNewRental.addClickListener(e -> createRentalForm.setRental(new RentalDto()));
+        editRentalForm.setRental(null);
+        rentalsGrid.asSingleSelect().addValueChangeListener(e ->
+                editRentalForm.setRental((RentalDto) rentalsGrid.asSingleSelect().getValue()));
         rentalsPage.add(createRentalForm);
+        rentalsPage.add(editRentalForm);
         rentalsPage.setVisible(false);
 
         Map<Tab, Component> tabsToPages = new HashMap<>();
@@ -126,6 +135,14 @@ public class MainView extends VerticalLayout {
         booksGrid.setItems(bookService.fetchBooks());
         usersGrid.setItems(userService.fetchUsers());
         rentalsGrid.setItems(rentalService.fetchRentals());
+    }
+
+    public void alignGridColumns(Grid grid){
+        for(Object col : grid.getColumns()){
+            if(col instanceof Grid.Column) {
+                ((Grid.Column) col).setAutoWidth(true);
+            }
+        }
     }
 
 }

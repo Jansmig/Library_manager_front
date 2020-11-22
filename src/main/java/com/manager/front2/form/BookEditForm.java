@@ -59,7 +59,6 @@ public class BookEditForm extends FormLayout {
             setVisible(false);
         } else {
             setVisible(true);
-    //        bookStatus.focus();
         }
     }
 

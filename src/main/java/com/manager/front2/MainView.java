@@ -4,9 +4,7 @@ import com.manager.front2.domain.BookDto;
 import com.manager.front2.domain.OriginDto;
 import com.manager.front2.domain.RentalDto;
 import com.manager.front2.domain.UserDto;
-import com.manager.front2.filter.BookFilter;
-import com.manager.front2.filter.OriginFilter;
-import com.manager.front2.filter.StatusFilter;
+import com.manager.front2.filter.*;
 import com.manager.front2.form.*;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
@@ -16,6 +14,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -38,16 +37,22 @@ public class MainView extends VerticalLayout {
     private OriginFilter originFilter = new OriginFilter(originsGrid);
     private OriginForm originForm = new OriginForm(this);
     private Button addNewOrigin = new Button("Add new Origin");
-    private BookFilter bookFilter = new BookFilter(booksGrid);
-    private StatusFilter statusFilter = new StatusFilter(booksGrid);
+    private HorizontalLayout originButtons = new HorizontalLayout(originFilter ,addNewOrigin);
+    private BookFilter bookTitleFilter = new BookFilter(booksGrid);
+    private StatusFilter bookStatusFilter = new StatusFilter(booksGrid);
     private Button addNewBook = new Button("Add new Book");
+    private HorizontalLayout bookButtons = new HorizontalLayout(bookTitleFilter, bookStatusFilter, addNewBook);
     private BookCreateForm bookCreateForm = new BookCreateForm(this);
     private BookEditForm bookEditForm = new BookEditForm(this);
     private UserForm userForm = new UserForm(this);
     private Button addNewUser = new Button("Add new User");
+    private HorizontalLayout userButtons = new HorizontalLayout(addNewUser);
     private Button addNewRental = new Button("Add new Rental");
     private CreateRentalForm createRentalForm = new CreateRentalForm(this);
     private EditRentalForm editRentalForm = new EditRentalForm(this);
+    private RentalLastnameFilter rentalLastnameFilter = new RentalLastnameFilter(rentalsGrid);
+    private RentalStatusFilter rentalStatusFilter = new RentalStatusFilter(rentalsGrid);
+    private HorizontalLayout rentalButtons = new HorizontalLayout(rentalLastnameFilter, rentalStatusFilter, addNewRental);
 
 
     public MainView() {
@@ -64,8 +69,8 @@ public class MainView extends VerticalLayout {
         Div originPage = new Div();
         originForm.setOrigin(null);
         originPage.add(originsGrid);
-        originPage.add(originFilter);
-        originPage.add(addNewOrigin);
+        originPage.add(originButtons);
+        originButtons.setPadding(true);
         originPage.add(originForm);
         addNewOrigin.addClickListener(event -> {
             originForm.setOrigin(new OriginDto());
@@ -74,9 +79,8 @@ public class MainView extends VerticalLayout {
         Tab booksTab = new Tab("Books");
         Div booksPage = new Div();
         booksPage.add(booksGrid);
-        booksPage.add(bookFilter);
-        booksPage.add(statusFilter);
-        booksPage.add(addNewBook);
+        booksPage.add(bookButtons);
+        bookButtons.setPadding(true);
         addNewBook.addClickListener(e -> bookCreateForm.setVisible(true));
         booksPage.add(bookCreateForm);
         bookEditForm.setBook(null);
@@ -88,7 +92,8 @@ public class MainView extends VerticalLayout {
         Tab usersTab = new Tab("Users");
         Div usersPage = new Div();
         usersPage.add(usersGrid);
-        usersPage.add(addNewUser);
+        usersPage.add(userButtons);
+        userButtons.setPadding(true);
         addNewUser.addClickListener(e -> userForm.setUser(new UserDto()));
         userForm.setUser(null);
         usersGrid.asSingleSelect().addValueChangeListener(e ->
@@ -99,7 +104,8 @@ public class MainView extends VerticalLayout {
         Tab rentalsTab = new Tab("Rentals");
         Div rentalsPage = new Div();
         rentalsPage.add(rentalsGrid);
-        rentalsPage.add(addNewRental);
+        rentalsPage.add(rentalButtons);
+        rentalButtons.setPadding(true);
         addNewRental.addClickListener(e -> createRentalForm.setRental(new RentalDto()));
         editRentalForm.setRental(null);
         rentalsGrid.asSingleSelect().addValueChangeListener(e ->

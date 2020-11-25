@@ -12,6 +12,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 
+import java.time.LocalDateTime;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OriginForm extends FormLayout {
 
@@ -31,6 +33,8 @@ public class OriginForm extends FormLayout {
         add(title, author, publishedYear, isbn, buttons);
         binder.forField(publishedYear)
                 .withConverter(new StringToIntegerConverter("Requires integer"))
+                .withValidator(y -> y <= LocalDateTime.now().getYear(), "Looks like a book from the future.")
+                .withValidator(y -> y > -4000, "Kinda old, isn't it?")
                 .bind(OriginDto::getPublishedYear, OriginDto::setPublishedYear);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());

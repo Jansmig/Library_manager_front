@@ -9,8 +9,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.EmailValidator;
 
 
 public class UserForm extends FormLayout {
@@ -29,6 +31,15 @@ public class UserForm extends FormLayout {
         buttons.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, save, delete);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(firstName, lastName, email, buttons);
+        binder.forField(firstName)
+                .withValidator(n -> n.length() > 2, "Name requires at least 3 characters")
+                .bind(UserDto::getFirstName, UserDto::setFirstName);
+        binder.forField(lastName)
+                .withValidator(n -> n.length() > 2, "Surname requires at least 3 characters")
+                .bind(UserDto::getLastName, UserDto::setLastName);
+        binder.forField(email)
+                .withValidator(new EmailValidator("Invalid e-mail address"))
+                .bind(UserDto::getEmail, UserDto::setEmail);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());
         delete.addClickListener(event -> delete());

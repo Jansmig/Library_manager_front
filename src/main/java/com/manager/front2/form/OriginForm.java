@@ -23,12 +23,13 @@ public class OriginForm extends FormLayout {
     private TextField isbn = new TextField("ISBN");
     private Button save = new Button("Save");
     private Button delete = new Button("Delete");
+    private Button checkRating = new Button("Check rating");
     private Binder<OriginDto> binder = new Binder<>(OriginDto.class);
     private OriginService originService = OriginService.getInstance();
     private MainView mainView;
 
     public OriginForm(MainView mainView){
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        HorizontalLayout buttons = new HorizontalLayout(save, delete, checkRating);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(title, author, publishedYear, isbn, buttons);
         binder.forField(publishedYear)
@@ -36,11 +37,17 @@ public class OriginForm extends FormLayout {
                 .withValidator(y -> y <= LocalDateTime.now().getYear(), "Looks like a book from the future.")
                 .withValidator(y -> y > -4000, "Kinda old, isn't it?")
                 .bind(OriginDto::getPublishedYear, OriginDto::setPublishedYear);
+        binder.forField(isbn)
+                .withValidator(y -> y.length() == 10 || y.length() == 13, "ISBN number has to be a 10 or 13 characters long Integer")
+                .withValidator(y -> y.matches("\\d"), "ISBN number has to be a 10 or 13 characters long Integer")
+                .bind(OriginDto::getIsbn, OriginDto::setIsbn);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());
         delete.addClickListener(event -> delete());
+        checkRating.addClickListener(event -> checkGoodreadsRating());
         this.mainView = mainView;
     }
+
 
     private void save() {
         OriginDto originDto = binder.getBean();
@@ -64,6 +71,13 @@ public class OriginForm extends FormLayout {
             setVisible(true);
             title.focus();
         }
+    }
+
+    private void checkGoodreadsRating() {
+        OriginDto originDto = binder.getBean();
+        originService.updateGoodreadsRating(originDto);
+        mainView.refresh();
+        setOrigin(null);
     }
 
 }

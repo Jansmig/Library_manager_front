@@ -1,6 +1,7 @@
 package com.manager.front2.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OriginDto {
@@ -10,13 +11,15 @@ public class OriginDto {
     private String author;
     private int publishedYear;
     private String isbn;
+    private double rating;
 
-    public OriginDto(long id, String title, String author, int publishedYear, String isbn) {
+    public OriginDto(long id, String title, String author, int publishedYear, String isbn, double rating) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.publishedYear = publishedYear;
         this.isbn = isbn;
+        this.rating = rating;
     }
 
     public OriginDto() {
@@ -42,6 +45,10 @@ public class OriginDto {
         return isbn;
     }
 
+    public double getRating(){
+        return rating;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -60,5 +67,9 @@ public class OriginDto {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

@@ -11,14 +11,18 @@ import com.manager.front2.service.OriginService;
 import com.manager.front2.service.RentalService;
 import com.manager.front2.service.UserService;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.DefaultErrorHandler;
+import com.vaadin.flow.server.ErrorEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +60,8 @@ public class MainView extends VerticalLayout {
 
 
     public MainView() {
-        originsGrid.setColumns("id", "title", "author", "publishedYear", "isbn");
+        originsGrid.setColumns("id", "title", "author", "publishedYear", "isbn", "rating");
+        originsGrid.getColumnByKey("rating").setHeader("Goodreads rating");
         booksGrid.setColumns("id", "originId", "title", "bookStatus");
         usersGrid.setColumns("id", "firstName", "lastName", "email", "userCreationDate");
         rentalsGrid.setColumns("id", "active", "bookId", "bookTitle", "userId", "userFirstName", "userLastName", "rentalDate", "returnDate");
@@ -71,10 +76,12 @@ public class MainView extends VerticalLayout {
         originPage.add(originsGrid);
         originPage.add(originButtons);
         originButtons.setPadding(true);
-        originPage.add(originForm);
         addNewOrigin.addClickListener(event -> {
             originForm.setOrigin(new OriginDto());
         });
+        originsGrid.asSingleSelect().addValueChangeListener(event ->
+                originForm.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
+        originPage.add(originForm);
 
         Tab booksTab = new Tab("Books");
         Div booksPage = new Div();
@@ -133,7 +140,6 @@ public class MainView extends VerticalLayout {
 
         refresh();
 
-        originsGrid.asSingleSelect().addValueChangeListener(event -> originForm.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
     }
 
     public void refresh() {

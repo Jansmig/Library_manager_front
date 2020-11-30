@@ -41,7 +41,8 @@ public class MainView extends VerticalLayout {
     private OriginFilter originFilter = new OriginFilter(originsGrid);
     private OriginForm originForm = new OriginForm(this);
     private Button addNewOrigin = new Button("Add new Origin");
-    private HorizontalLayout originButtons = new HorizontalLayout(originFilter ,addNewOrigin);
+    private Button getAllRatings = new Button("Download all ratings");
+    private HorizontalLayout originButtons = new HorizontalLayout(originFilter, addNewOrigin, getAllRatings);
     private BookFilter bookTitleFilter = new BookFilter(booksGrid);
     private StatusFilter bookStatusFilter = new StatusFilter(booksGrid);
     private Button addNewBook = new Button("Add new Book");
@@ -78,6 +79,10 @@ public class MainView extends VerticalLayout {
         originButtons.setPadding(true);
         addNewOrigin.addClickListener(event -> {
             originForm.setOrigin(new OriginDto());
+        });
+        getAllRatings.addClickListener(e -> {
+            originService.updateAllGoodreadsRatings();
+            refresh();
         });
         originsGrid.asSingleSelect().addValueChangeListener(event ->
                 originForm.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
@@ -149,9 +154,9 @@ public class MainView extends VerticalLayout {
         rentalsGrid.setItems(rentalService.fetchRentals());
     }
 
-    public void alignGridColumns(Grid grid){
-        for(Object col : grid.getColumns()){
-            if(col instanceof Grid.Column) {
+    public void alignGridColumns(Grid grid) {
+        for (Object col : grid.getColumns()) {
+            if (col instanceof Grid.Column) {
                 ((Grid.Column) col).setAutoWidth(true);
             }
         }

@@ -57,5 +57,10 @@ public class OriginService {
         restTemplate.put(url, originDto, OriginDto.class);
     }
 
+    public void updateAllGoodreadsRatings(){
+        String url = "http://localhost:8080/v1/origins/allRatings";
+        restTemplate.put(url, null);
+    }
+
 
 }

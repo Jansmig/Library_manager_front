@@ -62,7 +62,4 @@ public class BookEditForm extends FormLayout {
         }
     }
 
-
-
-
 }

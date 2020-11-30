@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
+import com.vaadin.flow.data.validator.RegexpValidator;
 
 import java.time.LocalDateTime;
 
@@ -38,8 +39,7 @@ public class OriginForm extends FormLayout {
                 .withValidator(y -> y > -4000, "Kinda old, isn't it?")
                 .bind(OriginDto::getPublishedYear, OriginDto::setPublishedYear);
         binder.forField(isbn)
-                .withValidator(y -> y.length() == 10 || y.length() == 13, "ISBN number has to be a 10 or 13 characters long Integer")
-                .withValidator(y -> y.matches("\\d"), "ISBN number has to be a 10 or 13 characters long Integer")
+                .withValidator(y -> y.matches("[\\d]{10}|[\\d]{13}"), "ISBN has to be a 10 or 13 characters long Integer")
                 .bind(OriginDto::getIsbn, OriginDto::setIsbn);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());
@@ -47,7 +47,6 @@ public class OriginForm extends FormLayout {
         checkRating.addClickListener(event -> checkGoodreadsRating());
         this.mainView = mainView;
     }
-
 
     private void save() {
         OriginDto originDto = binder.getBean();

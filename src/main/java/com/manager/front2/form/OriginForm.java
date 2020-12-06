@@ -39,7 +39,7 @@ public class OriginForm extends FormLayout {
                 .withValidator(y -> y > -4000, "Kinda old, isn't it?")
                 .bind(OriginDto::getPublishedYear, OriginDto::setPublishedYear);
         binder.forField(isbn)
-                .withValidator(y -> y.matches("[\\d]{10}|[\\d]{13}"), "ISBN has to be a 10 or 13 characters long Integer")
+                .withValidator(y -> y.matches("\\d{10}|\\d{13}"), "ISBN has to be a 10 or 13 characters long Integer")
                 .bind(OriginDto::getIsbn, OriginDto::setIsbn);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());

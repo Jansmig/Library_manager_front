@@ -11,18 +11,16 @@ import com.manager.front2.service.OriginService;
 import com.manager.front2.service.RentalService;
 import com.manager.front2.service.UserService;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.DefaultErrorHandler;
-import com.vaadin.flow.server.ErrorEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +41,7 @@ public class MainView extends VerticalLayout {
     private Button addNewOrigin = new Button("Add new Origin");
     private Button getAllRatings = new Button("Download all ratings");
     private HorizontalLayout originButtons = new HorizontalLayout(originFilter, addNewOrigin, getAllRatings);
+    private Details instructions = new Details("Details & instruction", new Text(""));
     private BookFilter bookTitleFilter = new BookFilter(booksGrid);
     private StatusFilter bookStatusFilter = new StatusFilter(booksGrid);
     private Button addNewBook = new Button("Add new Book");
@@ -87,6 +86,10 @@ public class MainView extends VerticalLayout {
         originsGrid.asSingleSelect().addValueChangeListener(event ->
                 originForm.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
         originPage.add(originForm);
+        instructions.setContent(new Text("Please note that the application will not allow for actions violating integrity constraints, such as deletion of objects if there are other objects depending on it. Example: it is not possible to delete an origin if there are rentals of books of that origin. First related rentals need to be deleted, then it is possible to delete the origin (which will also delete all the books of that origin). There are also field constraints and validators checking for example if provided email address is valid, whether given ISBN already exists in the database etc.\n" +
+                "To edit or reveal/hide additional functionalities relating existing objects, simply click/unclick a record in the table. Ratings are sourced from goodreads.com"));
+        originPage.add(instructions);
+
 
         Tab booksTab = new Tab("Books");
         Div booksPage = new Div();

@@ -11,26 +11,23 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
-import com.vaadin.flow.data.validator.RegexpValidator;
 
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OriginForm extends FormLayout {
+public class OriginFormNew extends FormLayout {
 
     private TextField title = new TextField("Title");
     private TextField author = new TextField("Author");
     private TextField publishedYear = new TextField("Published year");
     private TextField isbn = new TextField("ISBN");
     private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-    private Button checkRating = new Button("Check rating");
     private Binder<OriginDto> binder = new Binder<>(OriginDto.class);
     private OriginService originService = OriginService.getInstance();
     private MainView mainView;
 
-    public OriginForm(MainView mainView){
-        HorizontalLayout buttons = new HorizontalLayout(save, delete, checkRating);
+    public OriginFormNew(MainView mainView){
+        HorizontalLayout buttons = new HorizontalLayout(save);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(title, author, publishedYear, isbn, buttons);
         binder.forField(publishedYear)
@@ -43,21 +40,12 @@ public class OriginForm extends FormLayout {
                 .bind(OriginDto::getIsbn, OriginDto::setIsbn);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());
-        delete.addClickListener(event -> delete());
-        checkRating.addClickListener(event -> checkGoodreadsRating());
         this.mainView = mainView;
     }
 
     private void save() {
         OriginDto originDto = binder.getBean();
         originService.saveOrigin(originDto);
-        mainView.refresh();
-        setOrigin(null);
-    }
-
-    private void delete() {
-        OriginDto originDto = binder.getBean();
-        originService.deleteOrigin(originDto);
         mainView.refresh();
         setOrigin(null);
     }
@@ -70,13 +58,6 @@ public class OriginForm extends FormLayout {
             setVisible(true);
             title.focus();
         }
-    }
-
-    private void checkGoodreadsRating() {
-        OriginDto originDto = binder.getBean();
-        originService.updateGoodreadsRating(originDto);
-        mainView.refresh();
-        setOrigin(null);
     }
 
 }

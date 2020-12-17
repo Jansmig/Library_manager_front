@@ -40,6 +40,12 @@ public class UserService {
         restTemplate.postForObject(url, userDto, UserDto.class);
     }
 
+    public void updateUser(UserDto userDto) {
+        String url = "http://localhost:8080/v1/users/";
+        restTemplate.put(url, userDto, UserDto.class);
+    }
+
+
     public void deleteUser(UserDto userDto) {
         long userId = userDto.getId();
         String url = "http://localhost:8080/v1/users/" + userId;

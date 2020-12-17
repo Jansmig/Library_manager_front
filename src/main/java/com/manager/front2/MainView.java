@@ -13,13 +13,16 @@ import com.manager.front2.service.UserService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.Route;
 
 import java.util.HashMap;
@@ -37,7 +40,8 @@ public class MainView extends VerticalLayout {
     private Grid usersGrid = new Grid<>(UserDto.class);
     private Grid rentalsGrid = new Grid<>(RentalDto.class);
     private OriginFilter originFilter = new OriginFilter(originsGrid);
-    private OriginForm originForm = new OriginForm(this);
+    private OriginFormNew originFormNew = new OriginFormNew(this);
+    private OriginFormUpdate originFormUpdate = new OriginFormUpdate(this);
     private Button addNewOrigin = new Button("Add new Origin");
     private Button getAllRatings = new Button("Download all ratings");
     private HorizontalLayout originButtons = new HorizontalLayout(originFilter, addNewOrigin, getAllRatings);
@@ -48,7 +52,8 @@ public class MainView extends VerticalLayout {
     private HorizontalLayout bookButtons = new HorizontalLayout(bookTitleFilter, bookStatusFilter, addNewBook);
     private BookCreateForm bookCreateForm = new BookCreateForm(this);
     private BookEditForm bookEditForm = new BookEditForm(this);
-    private UserForm userForm = new UserForm(this);
+    private UserFormNew userFormNew = new UserFormNew(this);
+    private UserFormUpdate userFormUpdate = new UserFormUpdate(this);
     private Button addNewUser = new Button("Add new User");
     private HorizontalLayout userButtons = new HorizontalLayout(addNewUser);
     private Button addNewRental = new Button("Add new Rental");
@@ -72,22 +77,24 @@ public class MainView extends VerticalLayout {
 
         Tab originsTab = new Tab("Origins");
         Div originPage = new Div();
-        originForm.setOrigin(null);
+        originFormNew.setOrigin(null);
+        originFormUpdate.setOrigin(null);
         originPage.add(originsGrid);
         originPage.add(originButtons);
         originButtons.setPadding(true);
         addNewOrigin.addClickListener(event -> {
-            originForm.setOrigin(new OriginDto());
+            originFormNew.setOrigin(new OriginDto());
         });
         getAllRatings.addClickListener(e -> {
             originService.updateAllGoodreadsRatings();
             refresh();
         });
         originsGrid.asSingleSelect().addValueChangeListener(event ->
-                originForm.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
-        originPage.add(originForm);
-        instructions.setContent(new Text("Please note that the application will not allow for actions violating integrity constraints, such as deletion of objects if there are other objects depending on it. Example: it is not possible to delete an origin if there are rentals of books of that origin. First related rentals need to be deleted, then it is possible to delete the origin (which will also delete all the books of that origin). There are also field constraints and validators checking for example if provided email address is valid, whether given ISBN already exists in the database etc.\n" +
-                "To edit or reveal/hide additional functionalities relating existing objects, simply click/unclick a record in the table. Ratings are sourced from goodreads.com"));
+                originFormUpdate.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
+        originPage.add(originFormNew);
+        originPage.add(originFormUpdate);
+        instructions.setContent(new Text("Please note that the application will not allow for actions violating integrity constraints, such as deletion of an object if some other objects depend on it. For example: it is not possible to delete an origin if there are rentals of books of that origin. First rentals need to be deleted, then it is possible to delete the origin (which will also delete all books of that origin). There are also field constraints and validators (e.g. for email address, whether given ISBN already exists in the database etc.\n" +
+                "To edit or reveal/hide additional functionalities relating existing objects, simply click/unclick a record in the table. Ratings are sourced from www.goodreads.com"));
         originPage.add(instructions);
 
 
@@ -109,11 +116,13 @@ public class MainView extends VerticalLayout {
         usersPage.add(usersGrid);
         usersPage.add(userButtons);
         userButtons.setPadding(true);
-        addNewUser.addClickListener(e -> userForm.setUser(new UserDto()));
-        userForm.setUser(null);
+        addNewUser.addClickListener(e -> userFormNew.setUser(new UserDto()));
+        userFormNew.setUser(null);
+        userFormUpdate.setUser(null);
         usersGrid.asSingleSelect().addValueChangeListener(e ->
-                userForm.setUser((UserDto) usersGrid.asSingleSelect().getValue()));
-        usersPage.add(userForm);
+                userFormUpdate.setUser((UserDto) usersGrid.asSingleSelect().getValue()));
+        usersPage.add(userFormNew);
+        usersPage.add(userFormUpdate);
         usersPage.setVisible(false);
 
         Tab rentalsTab = new Tab("Rentals");

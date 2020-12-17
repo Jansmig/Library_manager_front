@@ -46,6 +46,11 @@ public class OriginService {
         restTemplate.postForObject(url, originDto, OriginDto.class);
     }
 
+    public void updateOrigin(OriginDto originDto) {
+        String url = "http://localhost:8080/v1/origins";
+        restTemplate.put(url, originDto, OriginDto.class);
+    }
+
     public void deleteOrigin(OriginDto originDto) {
         long originId = originDto.getId();
         String url = "http://localhost:8080/v1/origins/" + originId;

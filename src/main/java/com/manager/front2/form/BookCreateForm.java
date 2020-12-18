@@ -19,12 +19,12 @@ public class BookCreateForm extends FormLayout {
     private MainView mainView;
 
     public BookCreateForm(MainView mainView){
+        this.mainView = mainView;
         HorizontalLayout buttons = new HorizontalLayout(create);
         buttons.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, create);
         add(bookOriginBox, buttons);
         create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         create.addClickListener(e -> createBook());
-        this.mainView = mainView;
         this.setVisible(false);
     }
 
@@ -39,6 +39,10 @@ public class BookCreateForm extends FormLayout {
         bookService.createBook(originId);
         mainView.refresh();
         this.setVisible(false);
+    }
+
+    public void refreshAvailableOrigins(){
+        bookOriginBox.refresh();
     }
 
 

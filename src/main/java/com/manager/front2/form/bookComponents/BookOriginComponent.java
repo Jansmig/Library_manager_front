@@ -17,6 +17,7 @@ public class BookOriginComponent extends ComboBox<String> {
     public BookOriginComponent(){
         this.setLabel("Origin");
         this.setItems(getOriginsTitles());
+        setClearButtonVisible(true);
     }
 
 
@@ -27,6 +28,10 @@ public class BookOriginComponent extends ComboBox<String> {
                 .collect(Collectors.toList());
 
         return titlesList;
+    }
+
+    public void refresh(){
+        this.setItems(getOriginsTitles());
     }
 
 }

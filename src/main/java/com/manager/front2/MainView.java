@@ -6,6 +6,7 @@ import com.manager.front2.domain.RentalDto;
 import com.manager.front2.domain.UserDto;
 import com.manager.front2.filter.*;
 import com.manager.front2.form.*;
+import com.manager.front2.pages.OriginsPage;
 import com.manager.front2.service.BookService;
 import com.manager.front2.service.OriginService;
 import com.manager.front2.service.RentalService;
@@ -31,21 +32,12 @@ import java.util.Map;
 @Route
 public class MainView extends VerticalLayout {
 
-    private OriginService originService = OriginService.getInstance();
     private BookService bookService = BookService.getInstance();
     private UserService userService = UserService.getInstance();
     private RentalService rentalService = RentalService.getInstance();
-    private Grid originsGrid = new Grid<>(OriginDto.class);
     private Grid booksGrid = new Grid<>(BookDto.class);
     private Grid usersGrid = new Grid<>(UserDto.class);
     private Grid rentalsGrid = new Grid<>(RentalDto.class);
-    private OriginFilter originFilter = new OriginFilter(originsGrid);
-    private OriginFormNew originFormNew = new OriginFormNew(this);
-    private OriginFormUpdate originFormUpdate = new OriginFormUpdate(this);
-    private Button addNewOrigin = new Button("Add new Origin");
-    private Button getAllRatings = new Button("Download all ratings");
-    private HorizontalLayout originButtons = new HorizontalLayout(originFilter, addNewOrigin, getAllRatings);
-    private Details instructions = new Details("Details & instruction", new Text(""));
     private BookFilter bookTitleFilter = new BookFilter(booksGrid);
     private StatusFilter bookStatusFilter = new StatusFilter(booksGrid);
     private Button addNewBook = new Button("Add new Book");
@@ -62,41 +54,16 @@ public class MainView extends VerticalLayout {
     private RentalLastnameFilter rentalLastnameFilter = new RentalLastnameFilter(rentalsGrid);
     private RentalStatusFilter rentalStatusFilter = new RentalStatusFilter(rentalsGrid);
     private HorizontalLayout rentalButtons = new HorizontalLayout(rentalLastnameFilter, rentalStatusFilter, addNewRental);
+    private OriginsPage originsPage = new OriginsPage(this);
 
 
     public MainView() {
-        originsGrid.setColumns("id", "title", "author", "publishedYear", "isbn", "rating");
-        originsGrid.getColumnByKey("rating").setHeader("Goodreads rating");
         booksGrid.setColumns("id", "originId", "title", "bookStatus");
         usersGrid.setColumns("id", "firstName", "lastName", "email", "userCreationDate");
         rentalsGrid.setColumns("id", "active", "bookId", "bookTitle", "userId", "userFirstName", "userLastName", "rentalDate", "returnDate");
-        alignGridColumns(originsGrid);
         alignGridColumns(booksGrid);
         alignGridColumns(usersGrid);
         alignGridColumns(rentalsGrid);
-
-        Tab originsTab = new Tab("Origins");
-        Div originPage = new Div();
-        originFormNew.setOrigin(null);
-        originFormUpdate.setOrigin(null);
-        originPage.add(originsGrid);
-        originPage.add(originButtons);
-        originButtons.setPadding(true);
-        addNewOrigin.addClickListener(event -> {
-            originFormNew.setOrigin(new OriginDto());
-        });
-        getAllRatings.addClickListener(e -> {
-            originService.updateAllGoodreadsRatings();
-            refresh();
-        });
-        originsGrid.asSingleSelect().addValueChangeListener(event ->
-                originFormUpdate.setOrigin((OriginDto) originsGrid.asSingleSelect().getValue()));
-        originPage.add(originFormNew);
-        originPage.add(originFormUpdate);
-        instructions.setContent(new Text("Please note that the application will not allow for actions violating integrity constraints, such as deletion of an object if some other objects depend on it. For example: it is not possible to delete an origin if there are rentals of books of that origin. First rentals need to be deleted, then it is possible to delete the origin (which will also delete all books of that origin). There are also field constraints and validators (e.g. for email address, whether given ISBN already exists in the database etc.\n" +
-                "To edit or reveal/hide additional functionalities relating existing objects, simply click/unclick a record in the table. Ratings are sourced from www.goodreads.com"));
-        originPage.add(instructions);
-
 
         Tab booksTab = new Tab("Books");
         Div booksPage = new Div();
@@ -138,13 +105,15 @@ public class MainView extends VerticalLayout {
         rentalsPage.add(editRentalForm);
         rentalsPage.setVisible(false);
 
+        Tab originsTab = new Tab("Origins");
+
         Map<Tab, Component> tabsToPages = new HashMap<>();
-        tabsToPages.put(originsTab, originPage);
+        tabsToPages.put(originsTab, originsPage);
         tabsToPages.put(booksTab, booksPage);
         tabsToPages.put(rentalsTab, rentalsPage);
         tabsToPages.put(usersTab, usersPage);
         Tabs tabs = new Tabs(originsTab, booksTab, usersTab, rentalsTab);
-        Div pages = new Div(originPage, booksPage, usersPage, rentalsPage);
+        Div pages = new Div(originsPage, booksPage, usersPage, rentalsPage);
 
         tabs.addSelectedChangeListener(event -> {
             tabsToPages.values().forEach(page -> page.setVisible(false));
@@ -154,13 +123,11 @@ public class MainView extends VerticalLayout {
 
         pages.setSizeFull();
         add(tabs, pages);
-
         refresh();
-
     }
 
     public void refresh() {
-        originsGrid.setItems(originService.fetchOrigins());
+        originsPage.refresh();
         booksGrid.setItems(bookService.fetchBooks());
         usersGrid.setItems(userService.fetchUsers());
         rentalsGrid.setItems(rentalService.fetchRentals());
@@ -175,3 +142,4 @@ public class MainView extends VerticalLayout {
     }
 
 }
+

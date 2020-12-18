@@ -27,6 +27,7 @@ public class OriginFormNew extends FormLayout {
     private MainView mainView;
 
     public OriginFormNew(MainView mainView){
+        this.mainView = mainView;
         HorizontalLayout buttons = new HorizontalLayout(save);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(title, author, publishedYear, isbn, buttons);
@@ -40,7 +41,6 @@ public class OriginFormNew extends FormLayout {
                 .bind(OriginDto::getIsbn, OriginDto::setIsbn);
         binder.bindInstanceFields(this);
         save.addClickListener(event -> save());
-        this.mainView = mainView;
     }
 
     private void save() {

@@ -29,6 +29,7 @@ public class OriginFormUpdate extends FormLayout {
     private MainView mainView;
 
     public OriginFormUpdate(MainView mainView){
+        this.mainView = mainView;
         HorizontalLayout buttons = new HorizontalLayout(update, delete, checkRating);
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(title, author, publishedYear, isbn, buttons);
@@ -44,7 +45,6 @@ public class OriginFormUpdate extends FormLayout {
         update.addClickListener(event -> update());
         delete.addClickListener(event -> delete());
         checkRating.addClickListener(event -> checkGoodreadsRating());
-        this.mainView = mainView;
     }
 
     private void update() {

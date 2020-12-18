@@ -10,8 +10,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-import java.util.Optional;
-
 public class BookCreateForm extends FormLayout {
 
     private OriginService originService = OriginService.getInstance();

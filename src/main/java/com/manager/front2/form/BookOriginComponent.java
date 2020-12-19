@@ -1,4 +1,4 @@
-package com.manager.front2.form.bookComponents;
+package com.manager.front2.form;
 
 import com.manager.front2.domain.BookStatus;
 import com.manager.front2.service.OriginService;
@@ -19,7 +19,6 @@ public class BookOriginComponent extends ComboBox<String> {
         this.setItems(getOriginsTitles());
         setClearButtonVisible(true);
     }
-
 
     public List<String> getOriginsTitles(){
         List<String> titlesList = new ArrayList<>();

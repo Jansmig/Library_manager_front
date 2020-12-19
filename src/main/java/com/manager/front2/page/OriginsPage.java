@@ -1,4 +1,4 @@
-package com.manager.front2.pages;
+package com.manager.front2.page;
 
 import com.manager.front2.MainView;
 import com.manager.front2.domain.OriginDto;

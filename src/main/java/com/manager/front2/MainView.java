@@ -1,16 +1,13 @@
 package com.manager.front2;
 
-import com.manager.front2.domain.BookDto;
 import com.manager.front2.domain.RentalDto;
 import com.manager.front2.domain.UserDto;
-import com.manager.front2.filter.BookFilter;
 import com.manager.front2.filter.RentalLastnameFilter;
 import com.manager.front2.filter.RentalStatusFilter;
-import com.manager.front2.filter.StatusFilter;
 import com.manager.front2.form.*;
-import com.manager.front2.pages.BooksPage;
-import com.manager.front2.pages.OriginsPage;
-import com.manager.front2.service.BookService;
+import com.manager.front2.page.BooksPage;
+import com.manager.front2.page.OriginsPage;
+import com.manager.front2.page.UsersPage;
 import com.manager.front2.service.RentalService;
 import com.manager.front2.service.UserService;
 import com.vaadin.flow.component.Component;
@@ -29,14 +26,8 @@ import java.util.Map;
 @Route
 public class MainView extends VerticalLayout {
 
-    private UserService userService = UserService.getInstance();
     private RentalService rentalService = RentalService.getInstance();
-    private Grid usersGrid = new Grid<>(UserDto.class);
     private Grid rentalsGrid = new Grid<>(RentalDto.class);
-    private UserFormNew userFormNew = new UserFormNew(this);
-    private UserFormUpdate userFormUpdate = new UserFormUpdate(this);
-    private Button addNewUser = new Button("Add new User");
-    private HorizontalLayout userButtons = new HorizontalLayout(addNewUser);
     private Button addNewRental = new Button("Add new Rental");
     private CreateRentalForm createRentalForm = new CreateRentalForm(this);
     private EditRentalForm editRentalForm = new EditRentalForm(this);
@@ -45,27 +36,13 @@ public class MainView extends VerticalLayout {
     private HorizontalLayout rentalButtons = new HorizontalLayout(rentalLastnameFilter, rentalStatusFilter, addNewRental);
     private OriginsPage originsPage = new OriginsPage(this);
     private BooksPage booksPage = new BooksPage(this);
+    private UsersPage usersPage = new UsersPage(this);
 
 
     public MainView() {
-        usersGrid.setColumns("id", "firstName", "lastName", "email", "userCreationDate");
         rentalsGrid.setColumns("id", "active", "bookId", "bookTitle", "userId", "userFirstName", "userLastName", "rentalDate", "returnDate");
-        alignGridColumns(usersGrid);
         alignGridColumns(rentalsGrid);
 
-        Tab usersTab = new Tab("Users");
-        Div usersPage = new Div();
-        usersPage.add(usersGrid);
-        usersPage.add(userButtons);
-        userButtons.setPadding(true);
-        addNewUser.addClickListener(e -> userFormNew.setUser(new UserDto()));
-        userFormNew.setUser(null);
-        userFormUpdate.setUser(null);
-        usersGrid.asSingleSelect().addValueChangeListener(e ->
-                userFormUpdate.setUser((UserDto) usersGrid.asSingleSelect().getValue()));
-        usersPage.add(userFormNew);
-        usersPage.add(userFormUpdate);
-        usersPage.setVisible(false);
 
         Tab rentalsTab = new Tab("Rentals");
         Div rentalsPage = new Div();
@@ -82,6 +59,7 @@ public class MainView extends VerticalLayout {
 
         Tab originsTab = new Tab("Origins");
         Tab booksTab = new Tab("Books");
+        Tab usersTab = new Tab("Users");
 
         Map<Tab, Component> tabsToPages = new HashMap<>();
         tabsToPages.put(originsTab, originsPage);
@@ -105,7 +83,7 @@ public class MainView extends VerticalLayout {
     public void refresh() {
         originsPage.refresh();
         booksPage.refresh();
-        usersGrid.setItems(userService.fetchUsers());
+        usersPage.refresh();
         rentalsGrid.setItems(rentalService.fetchRentals());
     }
 
